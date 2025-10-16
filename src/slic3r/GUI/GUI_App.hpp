@@ -236,9 +236,6 @@ private:
     bool            m_app_conf_exists{ false };
     EAppMode        m_app_mode{ EAppMode::Editor };
     bool            m_is_recreating_gui{ false };
-#ifdef __linux__
-    bool            m_opengl_initialized{ false };
-#endif
 #if defined(__WINDOWS__)
     bool            m_is_arm64{false};
 #endif
