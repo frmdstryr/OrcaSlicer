@@ -1,6 +1,6 @@
 #include "ShaderCSGDisplay.hpp"
 #include "libslic3r/SLAPrint.hpp"
-#include <GL/glew.h>
+#include <epoxy/gl.h>
 
 namespace Slic3r { namespace GL {
 

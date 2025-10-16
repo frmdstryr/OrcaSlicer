@@ -104,8 +104,8 @@ endif()
 
 option(SLIC3R_STATIC 			"Compile OrcaSlicer with static libraries (Boost, TBB, glew)" ${SLIC3R_STATIC_INITIAL})
 option(SLIC3R_GUI    			"Compile OrcaSlicer with GUI components (OpenGL, wxWidgets)" 1)
+option(SLIC3R_WAYLAND    		"Use wayland instad of X11 on linux" 1)
 option(SLIC3R_FHS               "Assume OrcaSlicer is to be installed in a FHS directory structure" 0)
-option(SLIC3R_WX_STABLE         "Build against wxWidgets stable (3.0) as oppsed to dev (3.1) on Linux" 0)
 option(SLIC3R_PROFILE 			"Compile OrcaSlicer with an invasive Shiny profiler" 0)
 option(SLIC3R_PCH               "Use precompiled headers" 1)
 option(SLIC3R_MSVC_COMPILE_PARALLEL "Compile on Visual Studio in parallel" 1)
@@ -117,7 +117,7 @@ CMAKE_DEPENDENT_OPTION(SLIC3R_DESKTOP_INTEGRATION "Allow perfoming desktop integ
 
 set(OPENVDB_FIND_MODULE_PATH "" CACHE PATH "Path to OpenVDB installation's find modules.")
 
-set(SLIC3R_GTK "2" CACHE STRING "GTK version to use with wxWidgets on Linux")
+set(SLIC3R_GTK "3" CACHE STRING "GTK version to use with wxWidgets on Linux")
 
 set(IS_CROSS_COMPILE FALSE)
 
@@ -167,6 +167,9 @@ endforeach()
 
 if (SLIC3R_GUI)
     add_definitions(-DSLIC3R_GUI)
+    if (CMAKE_SYSTEM_NAME STREQUAL "Linux" AND SLIC3R_WAYLAND)
+        add_definitions(-DSLIC3R_WAYLAND)
+    endif ()
 endif ()
 
 if(SLIC3R_DESKTOP_INTEGRATION)
@@ -616,17 +619,7 @@ find_package(PNG REQUIRED)
 
 set(OpenGL_GL_PREFERENCE "LEGACY")
 find_package(OpenGL REQUIRED)
-
-set(GLEW_ROOT "${CMAKE_PREFIX_PATH}")
-message("GLEW_ROOT: ${GLEW_ROOT}")
-# Find glew or use bundled version
-if (SLIC3R_STATIC AND NOT SLIC3R_STATIC_EXCLUDE_GLEW)
-    set(GLEW_USE_STATIC_LIBS ON)
-    set(GLEW_VERBOSE ON)
-endif()
-
-find_package(GLEW REQUIRED)
-
+find_package(epoxy REQUIRED)
 find_package(glfw3 REQUIRED)
 
 # Find the Cereal serialization library
@@ -698,18 +691,19 @@ else ()
                    "OpenVDB installation with the OPENVDB_FIND_MODULE_PATH cache variable.")
 endif ()
 
-find_path(SPNAV_INCLUDE_DIR spnav.h)
-if (SPNAV_INCLUDE_DIR)
-    find_library(SPNAV_LIB NAMES libspnav.a) # Force linking libspnav statically
-    if (SPNAV_LIB)
-        add_definitions(-DHAVE_SPNAV)
-        message(STATUS "SPNAV library found")
-    else()
-        message(STATUS "SPNAV library NOT found, Spacenavd not supported")
-    endif()
-else()
-    message(STATUS "SPNAV library NOT found, Spacenavd not supported")
-endif()
+# TODO: Fix for wayland
+# find_path(SPNAV_INCLUDE_DIR spnav.h)
+# if (SPNAV_INCLUDE_DIR)
+#     find_library(SPNAV_LIB NAMES libspnav.a) # Force linking libspnav statically
+#     if (SPNAV_LIB)
+#         add_definitions(-DHAVE_SPNAV)
+#         message(STATUS "SPNAV library found")
+#     else()
+#         message(STATUS "SPNAV library NOT found, Spacenavd not supported")
+#     endif()
+# else()
+#     message(STATUS "SPNAV library NOT found, Spacenavd not supported")
+# endif()
 
 set(TOP_LEVEL_PROJECT_DIR ${PROJECT_SOURCE_DIR})
 function(orcaslicer_copy_dlls target config postfix output_dlls)

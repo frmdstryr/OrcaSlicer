@@ -1093,12 +1093,14 @@ GUI_App::GUI_App()
 	, m_other_instance_message_handler(std::make_unique<OtherInstanceMessageHandler>())
 {
 	//app config initializes early becasuse it is used in instance checking in OrcaSlicer.cpp
+    BOOST_LOG_TRIVIAL(trace) << "GUI_App init_app_config";
     this->init_app_config();
+    BOOST_LOG_TRIVIAL(trace) << "GUI_App init_download_path";
     this->init_download_path();
 #if wxUSE_WEBVIEW_EDGE
     this->init_webview_runtime();
 #endif
-
+    BOOST_LOG_TRIVIAL(trace) << "GUI_App reset to active";
     reset_to_active();
 }
 
@@ -2247,6 +2249,7 @@ class wxBoostLog : public wxLog
 
 bool GUI_App::on_init_inner()
 {
+    BOOST_LOG_TRIVIAL(trace) << "init wx inner" << std::endl;
     wxLog::SetActiveTarget(new wxBoostLog());
 #if BBL_RELEASE_TO_PUBLIC
     wxLog::SetLogLevel(wxLOG_Message);

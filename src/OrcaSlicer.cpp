@@ -83,7 +83,7 @@ using namespace nlohmann;
 #include "slic3r/GUI/Plater.hpp"
 #include <GLFW/glfw3.h>
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(SLIC3R_WAYLAND)
 #include <X11/Xlib.h>
 #endif
 
@@ -1041,16 +1041,23 @@ int CLI::run(int argc, char **argv)
     set_current_thread_name("orcaslicer_main");
     // Save the thread ID of the main thread.
     save_main_thread_id();
+    set_logging_level(5);
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__)
+#if defined(SLIC3R_WAYLAND)
+    ::setenv("GDK_BACKEND", "wayland", /* replace */ true);
+    BOOST_LOG_TRIVIAL(info) << "GDK_BACKEND=wayland" << std::endl;
+#else
     // On Linux, wxGTK has no support for Wayland, and the app crashes on
     // startup if gtk3 is used. This env var has to be set explicitly to
     // instruct the window manager to fall back to X server mode.
     ::setenv("GDK_BACKEND", "x11", /* replace */ true);
+    BOOST_LOG_TRIVIAL(info) << "GDK_BACKEND=x11" << std::endl;
 
     // Also on Linux, we need to tell Xlib that we will be using threads,
     // lest we crash when we fire up GStreamer.
     XInitThreads();
+#endif
 #endif
 
 	// Switch boost::filesystem to utf8.
