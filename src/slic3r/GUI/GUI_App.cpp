@@ -1907,13 +1907,7 @@ wxGLContext* GUI_App::init_glcontext(wxGLCanvas& canvas)
 
 bool GUI_App::init_opengl()
 {
-#ifdef __linux__
-    bool status = m_opengl_mgr.init_gl();
-    m_opengl_initialized = true;
-    return status;
-#else
     return m_opengl_mgr.init_gl();
-#endif
 }
 
 // gets path to PrusaSlicer.ini, returns semver from first line comment
