@@ -332,7 +332,8 @@ void GLGizmosManager::reset_all_states()
         // close any open gizmo
         open_gizmo(current);
 
-    activate_gizmo(Undefined);
+    if (!m_gizmos.empty())
+        activate_gizmo(Undefined);
     // Orca: do not clear hover state, as Emboss gizmo can be used without selection
     //m_hover = Undefined;
 }
