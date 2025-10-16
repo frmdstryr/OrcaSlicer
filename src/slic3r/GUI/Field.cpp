@@ -1436,7 +1436,13 @@ void Choice::set_selection()
     choice_ctrl* field = dynamic_cast<choice_ctrl*>(window);
 	switch (m_opt.type) {
 	case coEnum:{
-        field->SetSelection(m_opt.default_value->getInt());
+        const auto index = m_opt.default_value->getInt();
+        if (index < m_opt.enum_values.size()) {
+            field->SetSelection(index);
+        } else {
+            BOOST_LOG_TRIVIAL(warning) << m_opt.opt_key << "default out of range" << index;
+            field->SetSelection(0);
+        }
 		break;
 	}
 	case coFloat:
