@@ -15,8 +15,6 @@
 #include "Plater.hpp"
 #include "Camera.hpp"
 
-#include <epoxy/gl.h>
-
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/log/trivial.hpp>
