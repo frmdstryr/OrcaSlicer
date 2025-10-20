@@ -9,6 +9,8 @@
 #include "libslic3r/Tesselate.hpp"
 #include "libslic3r/PresetBundle.hpp"
 
+#include <epoxy/gl.h>
+
 #include "GUI_App.hpp"
 #include "GUI_Colors.hpp"
 #include "GLCanvas3D.hpp"
