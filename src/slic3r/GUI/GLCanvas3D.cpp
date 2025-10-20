@@ -1196,8 +1196,21 @@ bool GLCanvas3D::init()
     if (m_initialized)
         return true;
 
-    if (m_canvas == nullptr || m_context == nullptr)
+    if (m_canvas == nullptr || !_set_current())
         return false;
+
+    if (!wxGetApp().init_opengl())
+        return false;
+
+#ifdef __WXGTK3__
+    // Wayland requires this or IsShownOnScreen will always return false
+    if (!m_canvas->CreateSurface())
+        return false;
+#endif
+
+    Size canvas_size = get_canvas_size();
+    wxGetApp().imgui()->set_display_size(static_cast<float>(canvas_size.get_width()), static_cast<float>(canvas_size.get_height()));
+    wxGetApp().imgui()->new_frame();
 
     // init dark mode status
     on_change_color_mode(wxGetApp().app_config->get("dark_color_mode") == "1", false);
@@ -1838,12 +1851,13 @@ void GLCanvas3D::render(bool only_init)
     if (!m_enable_render)
         return;
 
-    // ensures this canvas is current and initialized
-    if (!_is_shown_on_screen() || !_set_current() || !wxGetApp().init_opengl())
+    if (!is_initialized())
         return;
 
-    if (!is_initialized() && !init())
+    // ensures this canvas is current and initialized
+    if (!_is_shown_on_screen() || !_set_current())
         return;
+
     if (m_canvas_type == ECanvasType::CanvasView3D  && m_gizmos.get_current_type() == GLGizmosManager::Undefined) {
         enable_return_toolbar(false);
     }
@@ -4593,9 +4607,12 @@ void GLCanvas3D::on_paint(wxPaintEvent& evt)
 {
     if (m_initialized)
         m_dirty = true;
-    else
+    else {
         // Call render directly, so it gets initialized immediately, not from On Idle handler.
+        if (!init())
+            return;
         this->render();
+    }
 }
 
 void GLCanvas3D::force_set_focus() {
