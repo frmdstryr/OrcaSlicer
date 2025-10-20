@@ -36,9 +36,9 @@ webkit_web_view_evaluate_javascript                  (WebKitWebView             
                                                       GAsyncReadyCallback       callback,
                                                       gpointer                  user_data);
 WEBKIT_API JSCValue *
-webkit_web_view_evaluate_javascript_finish      (WebKitWebView             *web_view,
-                                                 GAsyncResult              *result,
-                                                 GError                    **error);
+webkit_web_view_evaluate_javascript_finish           (WebKitWebView             *web_view,
+                                                      GAsyncResult              *result,
+                                                      GError                    **error);
 }
 #endif
 
