@@ -91,11 +91,13 @@ void StaticLine::render(wxDC& dc)
     auto   label = GetLabel();
     if (!label.IsEmpty()) textSize = dc.GetTextExtent(label);
     wxRect titleRect{{0, 0}, size};
+    const int iconHeight = icon.bmp().IsOk() ? icon.GetBmpHeight(): 0;
+    const int iconWidth = icon.bmp().IsOk() ? icon.GetBmpWidth(): 0;
+    const int spacing = (icon.bmp().IsOk() && textSize.GetWidth() > 0) ? 5 : 0;
+    const int contentWidth = iconWidth + spacing + textSize.GetWidth();
+    titleRect.height = wxMax(iconHeight, textSize.GetHeight());
+    if (vertical) titleRect.Deflate((size.GetWidth() - contentWidth) / 2, 0);
     if (icon.bmp().IsOk()) {
-        titleRect.height = wxMax(icon.GetBmpHeight(), textSize.GetHeight());
-        int contentWidth = icon.GetBmpWidth() + ((icon.bmp().IsOk() && textSize.GetWidth() > 0) ? 5 : 0) +
-        textSize.GetWidth();
-        if (vertical) titleRect.Deflate((size.GetWidth() - contentWidth) / 2, 0);
         dc.DrawBitmap(icon.bmp(), {0, (size.y - icon.GetBmpHeight()) / 2});
         titleRect.x += icon.GetBmpWidth() + 5;
     }
