@@ -1,5 +1,5 @@
 find_path(LIBNOISE_INCLUDE_DIR libnoise/noise.h)
-find_library(LIBNOISE_LIBRARY_RELEASE NAMES libnoise libnoise_static liblibnoise_static)
+find_library(LIBNOISE_LIBRARY_RELEASE NAMES noise libnoise libnoise_static liblibnoise_static)
 find_library(LIBNOISE_LIBRARY_DEBUG NAMES libnoised libnoise_staticd liblibnoise_staticd)
 
 set(libnoise_LIB_FOUND FALSE)
