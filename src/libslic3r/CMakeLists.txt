@@ -489,6 +489,7 @@ cmake_policy(PUSH)
 cmake_policy(SET CMP0011 NEW)
 find_package(CGAL REQUIRED)
 find_package(OpenCV REQUIRED core)
+target_include_directories(libslic3r SYSTEM PUBLIC ${OpenCV_INCLUDE_DIRS})
 cmake_policy(POP)
 
 add_library(libslic3r_cgal STATIC 
