@@ -886,6 +886,7 @@ void GUI_App::post_init()
         }
         else {
             BOOST_LOG_TRIVIAL(warning) << __FUNCTION__ << "Found glcontext not ready, postpone the init";
+            plater_->canvas3D()->enable_render(true);
         }
 //#endif
         if (is_editor())

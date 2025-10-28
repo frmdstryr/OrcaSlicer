@@ -1196,21 +1196,11 @@ bool GLCanvas3D::init()
     if (m_initialized)
         return true;
 
-    if (m_canvas == nullptr || !_set_current())
+    if (m_canvas == nullptr || !m_canvas->IsShownOnScreen() || !_set_current())
         return false;
 
     if (!wxGetApp().init_opengl())
         return false;
-
-#ifdef __WXGTK3__
-    // Wayland requires this or IsShownOnScreen will always return false
-    if (!m_canvas->CreateSurface())
-        return false;
-#endif
-
-    Size canvas_size = get_canvas_size();
-    wxGetApp().imgui()->set_display_size(static_cast<float>(canvas_size.get_width()), static_cast<float>(canvas_size.get_height()));
-    wxGetApp().imgui()->new_frame();
 
     // init dark mode status
     on_change_color_mode(wxGetApp().app_config->get("dark_color_mode") == "1", false);
@@ -1257,6 +1247,12 @@ bool GLCanvas3D::init()
 #endif
     //if (!wxGetApp().is_gl_version_greater_or_equal_to(3, 0))
     //    wxGetApp().plater()->enable_wireframe(false);
+
+    Size canvas_size = get_canvas_size();
+    m_old_size = {static_cast<unsigned int>(canvas_size.get_width()), static_cast<unsigned int>(canvas_size.get_height())};
+    wxGetApp().imgui()->set_display_size(static_cast<float>(canvas_size.get_width()), static_cast<float>(canvas_size.get_height()));
+    wxGetApp().imgui()->new_frame();
+
     m_initialized = true;
 
     return true;
@@ -2101,7 +2097,8 @@ void GLCanvas3D::render(bool only_init)
 
     wxGetApp().imgui()->render();
 
-    m_canvas->SwapBuffers();
+    if (!m_canvas->SwapBuffers())
+        glcheck();
     m_render_stats.increment_fps_counter();
 }
 

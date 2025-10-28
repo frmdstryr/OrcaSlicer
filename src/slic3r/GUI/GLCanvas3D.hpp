@@ -563,7 +563,7 @@ private:
     bool m_initialized;
     //BBS: add flag to controll rendering
     bool m_render_preview{ true };
-    bool m_enable_render { true };
+    bool m_enable_render { false };
     bool m_apply_zoom_to_volumes_filter;
     bool m_picking_enabled;
     bool m_moving_enabled;
