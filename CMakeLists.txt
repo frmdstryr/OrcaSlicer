@@ -106,7 +106,7 @@ endif()
 if(DEFINED ENV{SLIC3R_STATIC})
     set(SLIC3R_STATIC_INITIAL $ENV{SLIC3R_STATIC})
 else()
-    set(SLIC3R_STATIC_INITIAL 1)
+    set(SLIC3R_STATIC_INITIAL 0)
 endif()
 
 option(SLIC3R_STATIC 			"Compile OrcaSlicer with static libraries (Boost, TBB, glew)" ${SLIC3R_STATIC_INITIAL})
