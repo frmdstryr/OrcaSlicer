@@ -685,15 +685,7 @@ find_package(PNG REQUIRED)
 set(OpenGL_GL_PREFERENCE "LEGACY")
 find_package(OpenGL REQUIRED)
 
-set(GLEW_ROOT "${CMAKE_PREFIX_PATH}")
-message("GLEW_ROOT: ${GLEW_ROOT}")
-# Find glew or use bundled version
-if (SLIC3R_STATIC AND NOT SLIC3R_STATIC_EXCLUDE_GLEW)
-    set(GLEW_USE_STATIC_LIBS ON)
-    set(GLEW_VERBOSE ON)
-endif()
-
-find_package(GLEW REQUIRED)
+find_package(epoxy REQUIRED)
 
 find_package(glfw3 REQUIRED)
 
