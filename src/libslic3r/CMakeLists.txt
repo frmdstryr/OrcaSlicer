@@ -537,11 +537,12 @@ target_include_directories(libslic3r SYSTEM PUBLIC ${OpenCASCADE_INCLUDE_DIR})
 find_package(JPEG REQUIRED)
 
 set(OCCT_LIBS
-    TKXDESTEP
-    TKSTEP
-    TKSTEP209
-    TKSTEPAttr
-    TKSTEPBase
+    TKDESTEP
+    # These are not needed for OCCT 7.9+
+    # TKSTEP
+    # TKSTEP209
+    # TKSTEPAttr
+    # TKSTEPBase
     TKXCAF
     TKXSBase
     TKVCAF
@@ -571,7 +572,7 @@ target_link_libraries(libslic3r
         libigl
         libnest2d
         miniz
-        opencv_world
+        opencv_imgproc opencv_imgcodecs
     PRIVATE
         ${CMAKE_DL_LIBS}
         ${EXPAT_LIBRARIES}

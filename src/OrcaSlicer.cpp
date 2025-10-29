@@ -86,7 +86,7 @@ using namespace nlohmann;
 #include "slic3r/GUI/GuiColor.hpp"
 #include <GLFW/glfw3.h>
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(SLIC3R_WAYLAND)
 #include <X11/Xlib.h>
 #endif
 
@@ -1180,7 +1180,7 @@ int CLI::run(int argc, char **argv)
     // Save the thread ID of the main thread.
     save_main_thread_id();
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(SLIC3R_WAYLAND)
     // On Linux, wxGTK has no support for Wayland, and the app crashes on
     // startup if gtk3 is used. This env var has to be set explicitly to
     // instruct the window manager to fall back to X server mode.

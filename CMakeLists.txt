@@ -119,6 +119,7 @@ option(SLIC3R_MSVC_COMPILE_PARALLEL "Compile on Visual Studio in parallel" 1)
 option(SLIC3R_MSVC_PDB          "Generate PDB files on MSVC in Release mode" 1)
 option(SLIC3R_PERL_XS           "Compile XS Perl module and enable Perl unit and integration tests" 0)
 option(SLIC3R_ASAN              "Enable ASan on Clang and GCC" 0)
+option(SLIC3R_WAYLAND           "Use wayland instead of X11 on linux" 1)
 # If SLIC3R_FHS is 1 -> SLIC3R_DESKTOP_INTEGRATION is always 0, othrewise variable.
 CMAKE_DEPENDENT_OPTION(SLIC3R_DESKTOP_INTEGRATION "Allow perfoming desktop integration during runtime" 1 "NOT SLIC3R_FHS" 0)
 
@@ -755,6 +756,10 @@ if(SLIC3R_STATIC)
     set(USE_BLOSC TRUE)
 endif ()
 
+if (SLIC3R_WAYLAND)
+    add_definitions(-DSLIC3R_WAYLAND)
+endif()
+
 find_package(OpenVDB 5.0 COMPONENTS openvdb)
 if(OpenVDB_FOUND)
     slic3r_remap_configs(IlmBase::Half RelWithDebInfo Release)
@@ -768,7 +773,7 @@ endif ()
 find_path(SPNAV_INCLUDE_DIR spnav.h)
 if (SPNAV_INCLUDE_DIR)
     find_library(SPNAV_LIB NAMES libspnav.a) # Force linking libspnav statically
-    if (SPNAV_LIB)
+    if (SPNAV_LIB AND NOT SLIC3R_WAYLAND) # SPNAV does not work with wayland
         add_definitions(-DHAVE_SPNAV)
         message(STATUS "SPNAV library found")
     else()
