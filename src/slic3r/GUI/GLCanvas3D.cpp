@@ -4843,6 +4843,7 @@ void GLCanvas3D::on_mouse(wxMouseEvent& evt)
 
 void GLCanvas3D::on_paint(wxPaintEvent& evt)
 {
+    enable_render(true); // Force enable on paint
     if (m_initialized)
         m_dirty = true;
     else
