@@ -782,8 +782,8 @@ void PrintingTaskPanel::create_panel(wxWindow* parent)
 
     printingstage_horizontal_sizer->Add(m_printing_stage_value, 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 0);
     printingstage_horizontal_sizer->Add(m_question_button, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, FromDIP(5));
-    printingstage_vertical_sizer->Add(printingstage_horizontal_sizer, 0, wxALIGN_CENTER_VERTICAL, 0);
-    printingstage_vertical_sizer->Add(m_printing_stage_underline, 0, wxEXPAND |wxALIGN_TOP, 0);
+    printingstage_vertical_sizer->Add(printingstage_horizontal_sizer, 0, wxALIGN_LEFT, 0);
+    printingstage_vertical_sizer->Add(m_printing_stage_underline, 0, wxEXPAND, 0);
     m_printing_stage_panel->SetSizer(printingstage_vertical_sizer);
 
     // Orca: display the end time of the print
