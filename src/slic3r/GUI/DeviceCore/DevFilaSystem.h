@@ -93,6 +93,7 @@ public:
         AMS_LITE = 2, // AMS-Lite
         N3F = 3,      // N3F
         N3S = 4,      // N3S
+        QIDIBOX = 32,
     };
 
 public:

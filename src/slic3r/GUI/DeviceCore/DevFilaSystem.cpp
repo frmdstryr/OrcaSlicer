@@ -111,7 +111,7 @@ DevAms::DevAms(const std::string& ams_id, int nozzle_id, int type)
     m_ams_id = ams_id;
     m_ext_id = nozzle_id;
     m_ams_type = (AmsType)type;
-    assert(DUMMY < type && m_ams_type <= N3S);
+    assert(DUMMY < type && m_ams_type <= QIDIBOX);
 }
 
 DevAms::~DevAms()
@@ -131,7 +131,8 @@ static unordered_map<int, wxString> s_ams_display_formats = {
     {DevAms::AMS,      "AMS-%d"},
     {DevAms::AMS_LITE, "AMS Lite-%d"},
     {DevAms::N3F,      "AMS 2 PRO-%d"},
-    {DevAms::N3S,      "AMS HT-%d"}
+    {DevAms::N3S,      "AMS HT-%d"},
+    {DevAms::QIDIBOX,  "BOX-%d"}
 };
 
 wxString DevAms::GetDisplayName() const
@@ -166,7 +167,7 @@ wxString DevAms::GetDisplayName() const
 
 int DevAms::GetSlotCount() const
 {
-    if (m_ams_type == AMS || m_ams_type == AMS_LITE || m_ams_type == N3F)
+    if (m_ams_type == AMS || m_ams_type == AMS_LITE || m_ams_type == N3F || m_ams_type == QIDIBOX)
     {
         return 4;
     }
@@ -365,6 +366,8 @@ void DevFilaSystemParser::ParseV1_0(const json& jj, MachineObject* obj, DevFilaS
                         const std::string& info = (*it)["info"].get<std::string>();
                         type_id = DevUtil::get_flag_bits(info, 0, 4);
                         extuder_id = DevUtil::get_flag_bits(info, 8, 4);
+                    } else if (it->contains("qidi")) {
+                        type_id = DevAms::QIDIBOX;
                     } else {
                         if (!obj->is_enable_ams_np && obj->get_printer_ams_type() == "f1") {
                             type_id = DevAms::AMS_LITE;

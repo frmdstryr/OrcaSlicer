@@ -43,6 +43,18 @@ namespace Slic3r
                     delete obj;
                 }
             }
+        } else {
+            auto bundle = GUI::wxGetApp().preset_bundle;
+            Preset &preset = bundle->printers.get_edited_preset();
+            const auto host = preset.config.opt_string("print_host");
+            if (!host.empty()) {
+                MachineObject* obj       = new MachineObject(this, m_agent, preset.name, host, host);
+                obj->printer_type        = preset.get_printer_type(bundle);
+                obj->dev_connection_type = "lan";
+                obj->m_is_online         = true;
+                obj->last_alive          = Slic3r::Utils::get_current_time_utc();
+                localMachineList.insert(std::make_pair(obj->get_dev_ip(), obj));
+            }
         }
     }
 
@@ -867,21 +879,30 @@ namespace Slic3r
         if (!m_manager) { return; }
 
         NetworkAgent* agent = m_manager->get_agent();
-        if (!agent) { return; }
-
-        // reset to active
-        Slic3r::GUI::wxGetApp().reset_to_active();
 
         MachineObject* obj = m_manager->get_selected_machine();
         if (!obj) { return; }
 
         // check valid machine
-        if (obj && m_manager->get_my_machine(obj->get_dev_id()) == nullptr)
+        if (m_manager->get_my_machine(obj->get_dev_id()) == nullptr)
         {
             m_manager->set_selected_machine("");
-            agent->set_user_selected_machine("");
+            if (agent) {
+                agent->set_user_selected_machine("");
+                }
             return;
         }
+
+        if (!agent) {
+            // allow local refresh
+            if (obj->is_lan_mode_printer() && !obj->is_info_ready()) {
+                obj->reload_lan_printer_settings();
+            }
+            return;
+        }
+
+        // reset to active
+        Slic3r::GUI::wxGetApp().reset_to_active();
 
         // do some refresh
         if (Slic3r::GUI::wxGetApp().is_user_login())

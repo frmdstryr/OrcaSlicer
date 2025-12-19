@@ -604,6 +604,8 @@ set(SLIC3R_GUI_SOURCES
     Utils/Process.hpp
     Utils/ProfileDescription.hpp
     Utils/Profile.hpp
+    Utils/Qidi.cpp
+    Utils/Qidi.hpp
     Utils/RaycastManager.cpp
     Utils/RaycastManager.hpp
     Utils/Repetier.cpp
