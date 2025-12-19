@@ -459,6 +459,11 @@ std::string MachineObject::get_printer_ams_type() const
     return DevPrinterConfigUtil::get_printer_use_ams_type(printer_type);
 }
 
+std::string MachineObject::get_printer_family() const
+{
+    return DevPrinterConfigUtil::get_printer_family(printer_type);
+}
+
 bool MachineObject::is_series_n(const std::string& series_str) { return series_str == "series_n";  }
 bool MachineObject::is_series_p(const std::string& series_str) { return series_str == "series_p1p";}
 bool MachineObject::is_series_x(const std::string& series_str) { return series_str == "series_x1"; }

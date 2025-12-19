@@ -162,6 +162,8 @@ public:
     std::string get_dev_id() const { return dev_id; }
     void set_dev_id(std::string val) { dev_id = val; }
 
+    std::string get_printer_family() const;
+
     bool        local_use_ssl_for_mqtt { true };
     bool        local_use_ssl_for_ftp { true };
     std::string get_ftp_folder();

@@ -46,6 +46,7 @@ public:
     static std::string get_printer_type(const std::string& type_str) { return get_value_from_config<std::string>(type_str, "printer_type"); }
     static std::string get_printer_display_name(const std::string& type_str) { return get_value_from_config<std::string>(type_str, "display_name"); }
     static std::string get_printer_series_str(std::string type_str) { return get_value_from_config<std::string>(type_str, "printer_series"); }
+    static std::string get_printer_family(std::string type_str) { return get_value_from_config<std::string>(type_str, "family"); }
     static PrinterArch get_printer_arch(std::string type_str);
 
     // images
