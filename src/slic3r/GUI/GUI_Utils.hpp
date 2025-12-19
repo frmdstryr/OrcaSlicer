@@ -124,14 +124,7 @@ public:
         update_dark_ui(this);
 #endif
 
-        // Linux specific issue : get_dpi_for_window(this) still doesn't responce to the Display's scale in new wxWidgets(3.1.3).
-        // So, calculate the m_em_unit value from the font size, as before
-#if !defined(__WXGTK__)
-        m_em_unit = std::max<size_t>(10, 10.0f * m_scale_factor);
-#else
-        // initialize default width_unit according to the width of the one symbol ("m") of the currently active font of this window.
-        m_em_unit = std::max<size_t>(10, this->GetTextExtent("m").x - 1);
-#endif // __WXGTK__
+        update_em_unit();
 
 //        recalc_font();
 
@@ -215,6 +208,18 @@ public:
     const wxFont& normal_font() const   { return m_normal_font; }
     void enable_force_rescale()         { m_force_rescale = true; }
 
+    void update_em_unit()
+    {
+        // Linux specific issue : get_dpi_for_window(this) still doesn't responce to the Display's scale in new wxWidgets(3.1.3).
+        // So, calculate the m_em_unit value from the font size, as before
+#if defined(__WXGTK__)
+        // initialize default width_unit according to the width of the one symbol ("m") of the currently active font of this window.
+        m_em_unit = std::max<size_t>(10, this->GetTextExtent("m").x - 1);
+#else
+        m_em_unit = std::max<size_t>(10, 10.0f * m_scale_factor);
+#endif // __WXGTK__
+    }
+
 #ifdef _WIN32
     void force_color_changed()
     {
@@ -295,14 +300,7 @@ private:
         m_normal_font = this->GetFont();
 
         // update em_unit value for new window font
-        // Linux specific issue : get_dpi_for_window(this) still doesn't responce to the Display's scale in new wxWidgets(3.1.3).
-        // So, calculate the m_em_unit value from the font size, as before
-#if !defined(__WXGTK__)
-        m_em_unit = std::max<size_t>(10, 10.0f * m_scale_factor);
-#else
-        // initialize default width_unit according to the width of the one symbol ("m") of the currently active font of this window.
-        m_em_unit = std::max<size_t>(10, this->GetTextExtent("m").x - 1);
-#endif // __WXGTK__
+        update_em_unit();
 
         // rescale missed controls sizes and images
         on_dpi_changed(suggested_rect);
