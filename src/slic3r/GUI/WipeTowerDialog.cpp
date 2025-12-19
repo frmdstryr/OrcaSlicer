@@ -328,7 +328,7 @@ wxString WipingDialog::BuildTextObjStr(bool multi_language)
         auto_flush_tip = _L("Orca would re-calculate your flushing volumes everytime the filaments color changed or filaments changed. You could disable the auto-calculate in Orca Slicer > Preferences");
         volume_desp_panel = _L("Flushing volume (mm³) for each filament pair.");
         volume_range_panel = wxString::Format(_L("Suggestion: Flushing Volume in range [%d, %d]"), 0, 700);
-        multiplier_range_panel = wxString::Format(_L("The multiplier should be in range [%.2f, %.2f]."), 0, 3);
+        multiplier_range_panel = wxString::Format(_L("The multiplier should be in range [%.2f, %.2f]."), 0., 3.);
         calc_btn_panel = _L("Re-calculate");
         extruder_label_0 = _L("Left extruder");
         extruder_label_1 = _L("Right extruder");
@@ -339,7 +339,7 @@ wxString WipingDialog::BuildTextObjStr(bool multi_language)
         auto_flush_tip = "Orca would re-calculate your flushing volumes everytime the filaments color changed or filaments changed. You could disable the auto-calculate in Orca Slicer > Preferences";
         volume_desp_panel = wxString::FromUTF8("Flushing volume (mm³) for each filament pair.");
         volume_range_panel = wxString::Format("Suggestion: Flushing Volume in range [%d, %d]", 0, 700);
-        multiplier_range_panel = wxString::Format("The multiplier should be in range [%.2f, %.2f].", 0, 3);
+        multiplier_range_panel = wxString::Format("The multiplier should be in range [%.2f, %.2f].", 0., 3.);
         calc_btn_panel = "Re-calculate";
         extruder_label_0 = "Left extruder";
         extruder_label_1 = "Right extruder";
