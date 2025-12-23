@@ -112,6 +112,7 @@
 #include "../Utils/UndoRedo.hpp"
 #include "../Utils/PresetUpdater.hpp"
 #include "../Utils/Process.hpp"
+#include "../Utils/Qidi.hpp"
 #include "RemovableDriveManager.hpp"
 #include "InstanceCheck.hpp"
 #include "NotificationManager.hpp"
@@ -2365,7 +2366,11 @@ void Sidebar::update_all_preset_comboboxes()
     } else {
         //p->btn_connect_printer->Show();
         p->m_printer_connect->Show();
-        p->m_bpButton_ams_filament->Hide();
+        if (DevPrinterConfigUtil::get_printer_use_ams_type(preset_bundle.printers.get_edited_preset().get_printer_type(&preset_bundle)).empty()) {
+            p->m_bpButton_ams_filament->Show();
+        } else {
+            p->m_bpButton_ams_filament->Hide();
+        }
         auto print_btn_type = MainFrame::PrintSelectType::eExportGcode;
         wxString url = cfg.opt_string("print_host_webui").empty() ? cfg.opt_string("print_host") : cfg.opt_string("print_host_webui");
         wxString apikey;
@@ -3291,6 +3296,12 @@ void Sidebar::sync_ams_list(bool is_from_big_sync_btn)
     auto obj = wxGetApp().getDeviceManager()->get_selected_machine();
     if (obj)
         GUI::wxGetApp().sidebar().load_ams_list(obj);
+    else if (wxGetApp().preset_bundle->is_qidi_vendor())
+    {
+        Qidi qidi;
+        qidi.sync_filament_list(wxGetApp().preset_bundle);
+        return;
+    }
 
     auto & list = wxGetApp().preset_bundle->filament_ams_list;
     if (list.empty()) {
@@ -3309,7 +3320,7 @@ void Sidebar::sync_ams_list(bool is_from_big_sync_btn)
         }
     }
     if (!exist_at_list_one_filament) {
-        if (!obj->is_filament_installed()) {
+        if (obj && !obj->is_filament_installed()) {
             p->plater->pop_warning_and_go_to_device_page("", Plater::PrinterWarningType::UNINSTALL_FILAMENT, _L("Sync printer information"));
             return;
         }

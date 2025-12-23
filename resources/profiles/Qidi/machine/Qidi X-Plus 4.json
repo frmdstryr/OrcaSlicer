@@ -5,6 +5,7 @@
     "nozzle_diameter": "0.4;0.2;0.6;0.8",
     "machine_tech": "FFF",
     "family": "Qidi",
+    "use_ams_type": "qidibox",
     "bed_model": "qidi_xplus4_buildplate_model.stl",
     "bed_texture": "qidi_xplus4_buildplate_texture.png",
     "hotend_model": "qidi_xseries_gen3_hotend.stl",
