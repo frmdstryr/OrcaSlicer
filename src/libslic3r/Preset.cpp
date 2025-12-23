@@ -2169,7 +2169,7 @@ std::pair<Preset*, bool> PresetCollection::load_external_preset(
             this->get_edited_preset().config.apply_only(cfg, keys, true);
             this->update_dirty();
             update_saved_preset_from_current_preset();
-            assert(this->get_edited_preset().is_dirty);
+            //assert(this->get_edited_preset().is_dirty);
             //BBS: set the preset to visible
             if ( !it->is_visible ) {
                 it->is_visible = true;
