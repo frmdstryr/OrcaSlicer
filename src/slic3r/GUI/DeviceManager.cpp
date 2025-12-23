@@ -483,18 +483,6 @@ void MachineObject::reload_printer_settings()
     parse_json("cloud", "{}");
 }
 
-void MachineObject::reload_lan_printer_settings()
-{
-    if (get_printer_family() == "Qidi") {
-        // Sync QidiBox state
-        Qidi qidi;
-        qidi.printer_ip = get_dev_ip();
-        qidi.api_key = get_access_code();
-        parse_json("lan", qidi.sync());
-    }
-
-}
-
 MachineObject::MachineObject(DeviceManager* manager, NetworkAgent* agent, std::string name, std::string id, std::string ip)
     :dev_name(name),
     dev_id(id),

@@ -879,9 +879,13 @@ namespace Slic3r
         if (!m_manager) { return; }
 
         NetworkAgent* agent = m_manager->get_agent();
+        if (!agent) { return; }
 
         MachineObject* obj = m_manager->get_selected_machine();
         if (!obj) { return; }
+
+        // reset to active
+        Slic3r::GUI::wxGetApp().reset_to_active();
 
         // check valid machine
         if (m_manager->get_my_machine(obj->get_dev_id()) == nullptr)
@@ -892,17 +896,6 @@ namespace Slic3r
                 }
             return;
         }
-
-        if (!agent) {
-            // allow local refresh
-            if (obj->is_lan_mode_printer() && !obj->is_info_ready()) {
-                obj->reload_lan_printer_settings();
-            }
-            return;
-        }
-
-        // reset to active
-        Slic3r::GUI::wxGetApp().reset_to_active();
 
         // do some refresh
         if (Slic3r::GUI::wxGetApp().is_user_login())

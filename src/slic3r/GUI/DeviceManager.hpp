@@ -216,7 +216,6 @@ public:
     bool is_series_o() const;
 
     void reload_printer_settings();
-    void reload_lan_printer_settings();
     std::string get_printer_thumbnail_img_str() const;
 
     std::string dev_product_name;       // set by iot service, get /user/print
