@@ -8,6 +8,7 @@
 #pragma warning(push)
 #pragma warning(disable : 4146)
 #endif // _MSC_VER
+#define IMATH_HALF_NO_LOOKUP_TABLE
 #include <openvdb/openvdb.h>
 #ifdef _MSC_VER
 #pragma warning(pop)

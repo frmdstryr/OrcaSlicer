@@ -364,8 +364,8 @@ if (IlmBase_FOUND AND NOT TARGET IlmBase::Half)
   set_target_properties(IlmBase::Half PROPERTIES
     IMPORTED_LOCATION "${IlmHalf_LIBRARY}"
     INTERFACE_INCLUDE_DIRECTORIES "${IlmBase_INCLUDE_DIRS}")
-elseif(NOT IlmBase_FOUND)
-  just_fail("IlmBase::Half can not be found!")
+#elseif(NOT IlmBase_FOUND)
+#  just_fail("IlmBase::Half can not be found!")
 endif()
 find_package(TBB ${_quiet} ${_required} COMPONENTS tbb)
 find_package(ZLIB ${_quiet} ${_required})
@@ -472,7 +472,7 @@ endif()
 set(_OPENVDB_VISIBLE_DEPENDENCIES
   Boost::iostreams
   Boost::system
-  IlmBase::Half
+#  IlmBase::Half
 )
 
 set(_OPENVDB_DEFINITIONS)
@@ -480,8 +480,9 @@ if(OpenVDB_ABI)
   list(APPEND _OPENVDB_DEFINITIONS "-DOPENVDB_ABI_VERSION_NUMBER=${OpenVDB_ABI}")
 endif()
 
-if(OpenVDB_USES_EXR)
+if(OpenVDB_USES_EXR AND IlmBase_FOUND)
   list(APPEND _OPENVDB_VISIBLE_DEPENDENCIES
+    IlmBase::Half
     IlmBase::IlmThread
     IlmBase::Iex
     IlmBase::Imath

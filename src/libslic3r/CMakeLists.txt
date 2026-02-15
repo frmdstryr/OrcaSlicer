@@ -497,6 +497,7 @@ cmake_policy(PUSH)
 cmake_policy(SET CMP0011 NEW)
 find_package(CGAL REQUIRED)
 find_package(OpenCV REQUIRED core)
+target_include_directories(libslic3r SYSTEM PUBLIC ${OpenCV_INCLUDE_DIRS})
 cmake_policy(POP)
 
 add_library(libslic3r_cgal STATIC 
@@ -545,11 +546,13 @@ find_package(JPEG REQUIRED)
 find_package(draco REQUIRED)
 
 set(OCCT_LIBS
-    TKXDESTEP
-    TKSTEP
-    TKSTEP209
-    TKSTEPAttr
-    TKSTEPBase
+    TKDESTEP
+    # These are not needed for OCCT 7.9+
+    # TKXDESTEP
+    # TKSTEP
+    # TKSTEP209
+    # TKSTEPAttr
+    # TKSTEPBase
     TKXCAF
     TKXSBase
     TKVCAF
@@ -579,7 +582,7 @@ target_link_libraries(libslic3r
         libigl
         libnest2d
         miniz
-        opencv_world
+        opencv_imgproc opencv_imgcodecs
     PRIVATE
         ${CMAKE_DL_LIBS}
         ${EXPAT_LIBRARIES}
